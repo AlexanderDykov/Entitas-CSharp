@@ -1,3 +1,171 @@
+## [1.13.0] - 2019-02-20
+### Added
+- Update roslyn
+- Update hierarchy icons
+
+### Changed
+- Change Preferences minified and doubleQuoteMode api
+
+### Fixed
+- Fix hierarchy icon null warning
+
+## [1.12.2] - 2018-12-15
+### Fixed
+- Fix EntityLinkHierarchyIcon #843
+
+## [1.12.1] - 2018-12-09
+### Added
+- Fix Jenny.exe load default `Jenny.properties` when not specified
+
+## [1.12.0] - 2018-12-09
+### Added
+- Add Preferences require concrete properties path
+- Add CodeGeneratorPreferencesWindow
+- Add EntitasEntityLinkHierarchyIcon
+
+### Changed
+- Move Jenny Unity Preferences to its own editor window `Tools/Jenny/Preferences...`
+
+### Removed
+- Remove EntitasCache
+
+### Upgrade
+- Jenny has been decoupled from Entitas even more
+- Jenny now stores its config in Jenny.properties by default
+- Entitas now stores its config in Entitas.properties by default
+- Please split Preferences.properties into Entitas.properties and Jenny.properties or delete them to automatically create new default files
+
+## [1.11.0] - 2018-11-19
+### Added
+- Add support for multiple event attributes with different event target #810
+
+### Upgrade
+- All listener interfaces with `EventTarget.Any` need to be renamed
+  - `IPositionListener` -> `IAnyPositionListener`
+  - `OnPosition` -> `OnAnyPosition`
+
+## [1.10.0] - 2018-11-14
+### Changed
+- Remove IContext from EntityLink.Link() method signature
+
+### Upgrade
+- Remove IContext from EntityLink.Link() method signature
+
+## [1.9.2] - 2018-11-04
+### Added
+- Hotfix for Unity Asset Store missing mono hosted msbuild
+
+## [1.9.1] - 2018-11-03
+### Added
+- Fix MultiReactive system retaining entities multiple times #818
+
+## [1.9.0] - 2018-11-03
+### Added
+- Optimize generated code #780
+  - This increases entity and component creation performance
+- Optimize Visual Debugging performance #799
+  - This increases the performance especially when having thousands of entities
+- Generate XML documentation #792
+  - This will show documentation in the IDE
+- Using latest [bee](https://github.com/sschmid/bee)
+
+### Changed
+- Context ctor signature changed. Generate to fix compiler errors.
+  If you don't use the [Entitas.Roslyn plugins](http://u3d.as/NuJ) from the Unity Asset Store,
+  you have to manually fix the affected generated context classes.  E.g. `Generated/Game/GameContext.cs`,
+  add `() => new GameEntity()` as a last argument
+
+```csharp
+public sealed partial class GameContext : Entitas.Context<GameEntity> {
+
+    public GameContext()
+        : base(
+            GameComponentsLookup.TotalComponents,
+            0,
+            new Entitas.ContextInfo(
+                "Game",
+                GameComponentsLookup.componentNames,
+                GameComponentsLookup.componentTypes
+            ),
+            (entity) =>
+
+#if (ENTITAS_FAST_AND_UNSAFE)
+                new Entitas.UnsafeAERC(),
+#else
+                new Entitas.SafeAERC(entity),
+#endif
+            () => new GameEntity() // <---------- update here
+        ) {
+    }
+}
+```
+
+- Release retained entities when ReactiveSystem.Execute() has an exception #812
+  - This fixes spamming the Unity console with error messages
+
+# 1.8.2
+
+As always, the Unity Asset Store version might take a few days to be processed
+and accepted by Unity. Please check for updates in 2 - 4 days here:
+http://u3d.as/NuJ
+
+#### Entitas
+⚙️ Add "@" in front of component name if it is a C# keyword #744 #756 @roygear
+⚙️ Added convenience ctor to JobSystem to use all available threads on the device
+⚙️ JobSystem.Execute() is now virtual
+
+
+#### Jenny
+🛠 Fixed delays when running `jenny server`
+🆕 `jenny wiz` beta. Running Jenny.exe without args will automatically run `jenny wiz`
+🆕 `jenny help` aka man page
+
+Jenny Wizard is wip. If you have feedback or feature request, please add a comment here
+https://github.com/sschmid/Entitas-CSharp/issues/778
+
+
+# 1.8.1
+
+As always, the Unity Asset Store version might take a few days to be processed
+and accepted by Unity. Please check for updates in 2 - 4 days here:
+https://www.assetstore.unity3d.com/#!/content/87638
+
+#### Entitas
+⚙️ Add "@" in front of component name if it is a C# keyword #744 #756 @roygear
+⚙️ Added convenience ctor to JobSystem to use all available threads on the device
+⚙️ JobSystem.Execute() is now virtual
+
+
+#### Jenny
+🛠 Fixed delays when running `jenny server`
+🆕 `jenny wiz` beta. Running Jenny.exe without args will automatically run `jenny wiz`
+🆕 `jenny help` aka man page
+
+Jenny Wizard is wip. If you have feedback or feature request, please add a comment here
+https://github.com/sschmid/Entitas-CSharp/issues/778
+
+
+# 1.8.0
+
+As always, the Unity Asset Store version might take a few days to be processed
+and accepted by Unity. Please check for updates in 2 - 4 days here:
+https://www.assetstore.unity3d.com/#!/content/87638
+
+#### Entitas
+⚙️ Enabled [Event] for non components #743
+⚠️ Renamed `CustomComponentNameAttribute` to `ComponentNameAttribute`
+
+
+#### Jenny
+⚙️ Added more logs to `gen` command
+```csharp
+Generating using /Users/sschmid/Dev/C#/Half-life3/Jenny.properties
+Generating done (13220 files in 4 seconds)
+```
+⚙️ Added group to ICommand to support grouped usage overview
+#### Asset Store Version
+
+
 # 1.7.0
 
 As always, the Unity Asset Store version might take a few days to be processed
